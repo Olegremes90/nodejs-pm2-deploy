@@ -1,35 +1,8 @@
 require('dotenv').config({ path: '.env.deploy' });
 
-const {
-  DEPLOY_USER,
-  DEPLOY_HOST,
-  DEPLOY_PATH,
-  DEPLOY_REF = 'origin/master',
-} = process.env;
+const { DEPLOY_USER, DEPLOY_HOST, DEPLOY_PATH, DEPLOY_REF = 'origin/main' } = process.env;
 
 module.exports = {
-  apps: [
-    {
-      name: 'frontend',
-      script: 'npx',                      // Статический сервер для фронтенда
-      args: ['serve', '-s', 'frontend/build', '-l', '3001'],   // Путь к frontend сборке и порт
-      cwd: DEPLOY_PATH,
-      env: {
-        NODE_ENV: 'production',
-        PORT: 3001,
-        NODE_OPTIONS: '--openssl-legacy-provider',
-      },
-    },
-    {
-      name: 'backend',
-      script: 'backend/dist/app.js',    // Точка входа бэкенда
-      cwd: DEPLOY_PATH,
-      env: {
-        NODE_ENV: 'production',
-      },
-    },
-  ],
-
   deploy: {
     production: {
       user: DEPLOY_USER,
@@ -37,22 +10,14 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: 'git@github.com:Olegremes90/nodejs-pm2-deploy.git',
       path: DEPLOY_PATH,
-      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env.deploy`,
-      // Отдельный скрипт для frontend
+      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
       'post-deploy': `
-        cd frontend &&
-        source ~/.nvm/nvm.sh &&
-        npm install &&
-        npm run build &&
-        cd .. &&
-        cd backend &&
-        . ~/.nvm/nvm.sh &&
-        npm install &&
-        npm run build &&
-        pm2 reload ecosystem.config.js --only backend &&
-        pm2 startOrReload ecosystem.config.js --only frontend
+        cd frontend && npm install && npm run build &&
+        cd ../backend && npm install &&
+        pm2 restart ecosystem.front.config.js --only frontend &&
+        pm2 restart ecosystem.backend.config.js --only backend
       `,
-      ssh_options: 'StrictHostKeyChecking=no',
-    },
-  },
+      ssh_options: 'StrictHostKeyChecking=no'
+    }
+  }
 };
