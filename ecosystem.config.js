@@ -17,6 +17,7 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: 3001,
+        NODE_OPTIONS: '--openssl-legacy-provider',
       },
     },
     {
@@ -36,11 +37,11 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: 'git@github.com:Olegremes90/nodejs-pm2-deploy.git',
       path: DEPLOY_PATH,
-      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/source/.env.deploy`,
+      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env.deploy`,
       // Отдельный скрипт для frontend
       'post-deploy': `
         cd frontend &&
-        export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh &&
+        source ~/.nvm/nvm.sh &&
         npm install &&
         npm run build &&
         cd .. &&
