@@ -40,10 +40,12 @@ module.exports = {
       // Отдельный скрипт для frontend
       'post-deploy': `
         cd frontend &&
+        export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.shexport NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh &&
         npm install &&
         npm run build &&
         cd .. &&
         cd backend &&
+        . ~/.nvm/nvm.sh &&
         npm install &&
         npm run build &&
         pm2 reload ecosystem.config.js --only backend &&
