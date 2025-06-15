@@ -4,7 +4,7 @@ const {
   DEPLOY_USER,
   DEPLOY_HOST,
   DEPLOY_PATH,
-  DEPLOY_REF = 'origin/main',
+  DEPLOY_REF = 'origin/master',
 } = process.env;
 
 module.exports = {
@@ -34,9 +34,9 @@ module.exports = {
       user: DEPLOY_USER,
       host: DEPLOY_HOST,
       ref: DEPLOY_REF,
-      repo: 'https://github.com/Olegremes90/nodejs-pm2-deploy.git',
+      repo: 'git@github.com:Olegremes90/nodejs-pm2-deploy.git',
       path: DEPLOY_PATH,
-      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
+      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/source/.env.deploy`,
       // Отдельный скрипт для frontend
       'post-deploy': `
         cd frontend &&
@@ -45,6 +45,7 @@ module.exports = {
         cd .. &&
         cd backend &&
         npm install &&
+        npm run build &&
         pm2 reload ecosystem.config.js --only backend &&
         pm2 startOrReload ecosystem.config.js --only frontend
       `,
