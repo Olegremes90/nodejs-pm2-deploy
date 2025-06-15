@@ -32,7 +32,7 @@ module.exports = {
       repo: 'git@github.com:Olegremes90/nodejs-pm2-deploy.git',
       path: DEPLOY_PATH,
       'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
-      'post-deploy':    `cd frontend && export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only frontend && cd ../backend && . ~/.nvm/nvm.sh && npm install && npm start && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only backend`,
+      'post-deploy':    `cd frontend && export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only frontend && cd ../backend && . ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only backend`,
       ssh_options: 'StrictHostKeyChecking=no'
     }
   }
