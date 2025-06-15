@@ -18,7 +18,7 @@ module.exports = {
     {
       name: 'backend',
       script: 'dist/app.js',
-      cwd: '/home/mesto/source/backend',
+      cwd: '/home/mesto/my-app/source/backend',
       env: { NODE_ENV: 'production' },
       watch: false,
     }
@@ -32,7 +32,7 @@ module.exports = {
       repo: 'git@github.com:Olegremes90/nodejs-pm2-deploy.git',
       path: DEPLOY_PATH,
       'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
-      'post-deploy':    `cd frontend && export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only frontend && cd ../backend && . ~/.nvm/nvm.sh && npm install && npm run build && pm2 reload ecosystem.config.js --only mesto-backend`,
+      'post-deploy':    `cd frontend && export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only frontend && cd ../backend && . ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only mesto-backend`,
       ssh_options: 'StrictHostKeyChecking=no'
     }
   }
