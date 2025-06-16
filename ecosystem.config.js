@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '.env.deploy' });
 
-const { DEPLOY_USER, DEPLOY_HOST, DEPLOY_PATH, DEPLOY_REF = 'origin/master' } = process.env;
+const { DEPLOY_USER, DEPLOY_HOST, DEPLOY_PATH, REPO_GIT, DEPLOY_REF = 'origin/master' } = process.env;
 
 module.exports = {
   apps: [
@@ -29,10 +29,11 @@ module.exports = {
       user: DEPLOY_USER,
       host: DEPLOY_HOST,
       ref: DEPLOY_REF,
-      repo: 'git@github.com:Olegremes90/nodejs-pm2-deploy.git',
+      repo: REPO_GIT,
       path: DEPLOY_PATH,
       'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
-      'post-deploy':    `cd frontend && export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only frontend && cd ../backend && . ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.config.js --only backend`,
+      'post-deploy':    `pm2 startOrReload ${DEPLOY_PATH}/source/frontend/ecosystem.frontend.config.js --only frontend &&
+        pm2 startOrReload ${DEPLOY_PATH}/source/backend/ecosystem.backend.config.js --only backend`,
       ssh_options: 'StrictHostKeyChecking=no'
     }
   }
