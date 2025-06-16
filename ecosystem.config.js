@@ -32,16 +32,7 @@ module.exports = {
       repo: REPO_GIT,
       path: DEPLOY_PATH,
       'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
-      'post-deploy':    `
- cd ${DEPLOY_PATH}/source/frontend &&
-npm install &&
-npm run build &&
-pm2 startOrReload ${DEPLOY_PATH}/source/frontend/ecosystem.frontend.config.js --only frontend &&
-cd ${DEPLOY_PATH}/source/backend &&
-npm install &&
-npm run build &&
-pm2 startOrReload ${DEPLOY_PATH}/source/backend/ecosystem.backend.config.js --only backend
-  `,
+      'post-deploy': `cd ${DEPLOY_PATH}/source/frontend && export NODE_OPTIONS=--openssl-legacy-provider && source ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ecosystem.frontend.config.js --only frontend && cd ../backend && . ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ecosystem.backend.config.js --only backend`,
       ssh_options: 'StrictHostKeyChecking=no'
     }
   }

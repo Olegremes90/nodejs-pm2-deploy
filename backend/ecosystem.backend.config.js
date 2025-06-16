@@ -20,7 +20,7 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: REPO_GIT,
       path: DEPLOY_PATH,
-      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
+      'pre-deploy-local': `scp .env.back ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/source/backend/.env.back`,
       'post-deploy': 'pm2 startOrReload ecosystem.backend.config.js --only backend',
       ssh_options: 'StrictHostKeyChecking=no',
     },

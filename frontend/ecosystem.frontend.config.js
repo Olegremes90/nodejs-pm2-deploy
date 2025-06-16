@@ -24,7 +24,7 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: REPO_GIT,
       path: DEPLOY_PATH,
-      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
+      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/source/frontend/.env`,
       'post-deploy': `pm2 startOrReload ecosystem.frontend.config.js --only frontend`,
       ssh_options: 'StrictHostKeyChecking=no'
     }
