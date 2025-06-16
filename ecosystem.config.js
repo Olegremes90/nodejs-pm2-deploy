@@ -32,8 +32,16 @@ module.exports = {
       repo: REPO_GIT,
       path: DEPLOY_PATH,
       'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
-      'post-deploy':    `pm2 startOrReload ${DEPLOY_PATH}/source/frontend/ecosystem.frontend.config.js --only frontend &&
-        pm2 startOrReload ${DEPLOY_PATH}/source/backend/ecosystem.backend.config.js --only backend`,
+      'post-deploy':    `
+ cd ${DEPLOY_PATH}/source/frontend &&
+npm install &&
+npm run build &&
+pm2 startOrReload ${DEPLOY_PATH}/source/frontend/ecosystem.frontend.config.js --only frontend &&
+cd ${DEPLOY_PATH}/source/backend &&
+npm install &&
+npm run build &&
+pm2 startOrReload ${DEPLOY_PATH}/source/backend/ecosystem.backend.config.js --only backend
+  `,
       ssh_options: 'StrictHostKeyChecking=no'
     }
   }

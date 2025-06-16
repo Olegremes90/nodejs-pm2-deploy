@@ -21,7 +21,7 @@ module.exports = {
       repo: REPO_GIT,
       path: DEPLOY_PATH,
       'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/.env`,
-      'post-deploy': `cd backend && . ~/.nvm/nvm.sh && npm install && npm run build && pm2 startOrReload ${DEPLOY_PATH}/source/ecosystem.backend.config.js --only backend`,
+      'post-deploy': 'pm2 startOrReload ecosystem.backend.config.js --only backend',
       ssh_options: 'StrictHostKeyChecking=no',
     },
   },
