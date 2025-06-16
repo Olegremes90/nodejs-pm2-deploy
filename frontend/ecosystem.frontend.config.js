@@ -1,7 +1,3 @@
-require('dotenv').config({ path: '.env.front' });
-
-const { DEPLOY_USER, DEPLOY_HOST, DEPLOY_PATH, REPO_GIT, DEPLOY_REF = 'origin/master' } = process.env;
-
 module.exports = {
   apps: [
     {
@@ -19,12 +15,6 @@ module.exports = {
 
   deploy: {
     production: {
-      user: DEPLOY_USER,
-      host: DEPLOY_HOST,
-      ref: DEPLOY_REF,
-      repo: REPO_GIT,
-      path: DEPLOY_PATH,
-      'pre-deploy-local': `scp .env.deploy ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/source/frontend/.env`,
       'post-deploy': `pm2 startOrReload ecosystem.frontend.config.js --only frontend`,
       ssh_options: 'StrictHostKeyChecking=no'
     }
